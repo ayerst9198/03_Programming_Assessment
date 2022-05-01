@@ -1,5 +1,7 @@
 # Functions go here
-
+def yes_no():
+    pass
+    
 # Main routine goes here
 
 # lists
