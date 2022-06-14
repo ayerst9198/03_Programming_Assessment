@@ -54,7 +54,7 @@ yes_no = [
 
 #lists go here
 alphabet = ascii_lowercase # "abcdefghijklmnopqrstuvwxyz"
-alphabet_frequency = ascii_lowercase # "etaionsrdlucmfwygpbvkqjxsz"
+alphabet_frequency = "etaionsrdlucmfwygpbvkqjxsz"
 print("ALPHABET", alphabet)
 
 # loop for testing
@@ -86,9 +86,12 @@ while 1 == 1:
         for item in to_decrypt:
             for i in item:
                 if i in alphabet:
+                    #find letter from word in alphabet
                     position = alphabet.find(i)
+                    #creates shuffles the letter to mach the key
                     new_pos = (position - key) % 26
                     new_character = alphabet[new_pos]
+                    #new decrypted letter is added to decrypted string
                     decrypted += new_character
                 else:
                     decrypted += i
@@ -96,19 +99,26 @@ while 1 == 1:
     else:
         # insert decryption without key
         for item in to_decrypt:
-            for i in item:  
-                if i in alphabet_frequency:
-                    frequent_letter = max(to_decrypt)
-                    position = alphabet_frequency.find(frequent_letter)
-                    new_pos = (position + 1) % 26
+            frequent_letter = max(to_decrypt)
+            print(frequent_letter)
+            for frequent_letter in item:  
+                if frequent_letter in alphabet_frequency:
+                    # find letter from word in letter frequency alphabet
+                    position_letter = alphabet_frequency.find(frequent_letter)
+                    position_frequency = 5
+                    key = position_frequency - position_letter
+                    #creates shuffles the letter to mach the key
+                    new_pos = (position_letter - key) % 26
+
                     new_character = alphabet_frequency[new_pos]
+
+                    #new decrypted letter is added to decrypted string
                     decrypted += new_character
-                    position += 1
+
+
                 else:
                     decrypted += frequent_letter
             decrypted += " "
     print("decrypted = ", decrypted)
     print()
-
-    
 
