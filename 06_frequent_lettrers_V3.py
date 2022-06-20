@@ -33,5 +33,7 @@ for char in test_word:
       frequencies[char] = 1
 
 # Show Output
+dict(sorted(frequencies.items(), key=lambda item: item[1]))
+{0: 0, 2: 1, 1: 2, 4: 3, 3: 4}
 print ("Per char frequency in the test word is :\n {}".format(str(frequencies)))
 
