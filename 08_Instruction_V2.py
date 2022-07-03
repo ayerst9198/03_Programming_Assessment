@@ -54,7 +54,6 @@ def instructions(options):
         return ""
 
 
-
 # ******** MAIN ROUTINE *********
 
 yes_no = [
