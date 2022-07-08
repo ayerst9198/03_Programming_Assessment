@@ -1,7 +1,7 @@
 import time
 import sys
 from string import ascii_lowercase
-
+import random
 
 # functions go here
 
@@ -112,11 +112,146 @@ Please keep in mind that this program is mainly for entertainment
 purposes, and is not a secure form of encryption.""")
     return ""
 
+def cipher():
+
+    to_cipher = input("What is the message you would like to encrypt/decrypt?: ").lower()
+    if to_cipher == "xxx":
+        return "xxx"
+    to_cipher = to_cipher.split()
+    #ask user if they have a key.
+    key_ans = "invalid choice"
+    while key_ans == "invalid choice":
+        #ask user if they have a key
+        print()
+        key_ans = input("Do you have a key?: ")
+        #check that answer is valid
+        key_ans = string_checker(key_ans, yes_no)
+
+        if key_ans == "invalid choice":
+            print("Please enter yes or no")
+            print()
+    if key_ans == "Xxx":
+        return "xxx"
+    #ask user if they want to encrypt or decrypt
+    ask_encryption = "invalid choice"
+    print()
+    if key_ans == "Yes":
+        key = num_check("What is your key? ", int, "Please enter a whole number")
+        print()
+    while ask_encryption == "invalid choice":
+
+        ask_encryption = input("Do you want to encrypt or decrypt text? ")
+        print()
+        # check answer is valid
+        ask_encryption = string_checker(ask_encryption, encrypt_decrypt)
+
+
+        if ask_encryption == "invalid choice":
+            print()
+            print("Please enter decrypt (d), encrypt (e), or xxx to quit.")
+            print()
+
+    if ask_encryption == "Xxx":
+        return "xxx"
+    encrypted = ""
+    # if the user has a key, ask if they want to decrypt or encrypt text
+    if key_ans == "Yes":
+
+
+        for item in to_cipher:
+            for i in item:
+                if i in alphabet:
+                    # find letter from word in alphabet
+                    position = alphabet.find(i)
+                    # creates shuffles the letter to mach the key
+                    if ask_encryption == "Encrypt":
+                        new_pos = (position + key) % 26
+                    # new decrypted letter is added to decrypted string
+                    elif ask_encryption == "Decrypt":
+                        new_pos = (position - key) % 26
+                    new_character = alphabet[new_pos]
+                    #new decrypted/decrypted letter is added to decrypted string
+                    encrypted += new_character
+                else:
+                    encrypted += i
+            encrypted += " "
+        
+        if ask_encryption == "Encrypt":
+            print("Encrypted: ", encrypted)
+        else:
+            print("Decrypted: ", encrypted)
+        print()
+        print("Key: ", key)
+        print()
+
+    
+    # if user does not have a key (no key)
+    else:
+        
+        # keyless encryption
+
+
+        correct_decrypt = False
+        if ask_encryption == "Decrypt":
+            key = 1
+        else:
+            key = random.randint(1, 25)
+        
+        while correct_decrypt is False:
+            decrypted = ""
+            for item in to_cipher:
+                for i in item:
+                    if i in alphabet:
+                        #find letter from word in alphabet
+                        position = alphabet.find(i)
+                        #creates shuffles the letter to mach the key
+                        new_pos = (position - key) % 26
+                        new_character = alphabet[new_pos]
+                        #new decrypted letter is added to decrypted string
+                        decrypted += new_character
+                    else:
+                        decrypted += i
+                decrypted += " "
+            if ask_encryption == "Decrypt":
+                print()            
+                print("Attempted Decryption: '{}'".format(decrypted))
+
+                correct_ans = "invalid choice"
+
+                while correct_ans == "invalid choice":
+                    print()
+                    correct_ans = input("Is this decryption correct? ")
+
+                    correct_ans = string_checker(correct_ans, yes_no)
+                    
+                    if correct_ans == "invalid_choice":
+                        print("Please enter yes or no")
+                        print()
+
+
+                if correct_ans == "Yes":
+                    print()
+                    print("Decrypted: {}".format(decrypted))
+                    print()
+                    print("Key: {}".format(key))
+                    correct_decrypt = True
+                    return ""
+
+                else:
+                    key += 1
+                    correct_decrypt = False
+            else:
+                print("Encryption: ", decrypted)
+                print()
+                print("Random Key: ", key)
+                correct_decrypt = True
+                return ""
 
 # answer list
 yes_no = [
     ["yes", "y"],
-    ["no", "n"]
+    ["no", "n"],
+    ["xxx"]
 ]
 
 #encrypt or decrypt ans list
@@ -152,153 +287,13 @@ while not instructions_valid:
         break
     
 print()
+
 continue_game = True
 while continue_game == True:
-    #ask user if they want to encrypt or decrypt
-    ask_encryption = "invalid choice"
-    while ask_encryption == "invalid choice":
-        print()
-        ask_encryption = input("Do you want to encrypt or decrypt text? ").lower()
-        # check answer is valid
-        ask_encryption = string_checker(ask_encryption, encrypt_decrypt)
-
-        if ask_encryption == "invalid choice":
-            print()
-            print("Please enter decrypt (d), encrypt (e), or xxx to quit.")
-            print()
-
-    
-    if ask_encryption == "Xxx":
-        print()
-        continue_game = False
+    ask_quit = cipher()
+    if ask_quit == "xxx":
         break
 
-
-
-    elif ask_encryption == "Encrypt":
-        encrypted = ""
-        #asks user for a key for encryption
-        print()
-        key = num_check("What is your key? ", int, "Please enter a whole number")
-        print()
-        #asks user for text to encrypt
-        output = " "
-        to_encrypt = not_blank("What would you like to encrypt?: ", "dont be dum").lower()
-        to_encrypt = to_encrypt.split()
-        print()
-
-    # finds position of letters in the input string, replacing
-    # with letters higher up in the alphabet based on the
-    # key. 
-        # increase letter by key and add new letter to the encrypted text
-        for item in to_encrypt:
-            for i in item:
-                if i in alphabet:
-                    position = alphabet.find(i)
-                    new_pos = (position + key) % 26
-                    new_character = alphabet[new_pos]
-                    encrypted += new_character
-                else:
-                    encrypted += i
-            encrypted += " "
-
-        print("Encrypted: ", encrypted)
-        print()
-        print("Key: ", key)
-        print()
-
-    #If user wants to decrypt, run decryption code
-    elif ask_encryption == "Decrypt":
-        decrypted = ""
-
-        #asks user for text to decrypt
-        print()
-        to_decrypt = not_blank("What would you like to decrypt?: ", "no dum").lower()
-        to_decrypt = to_decrypt.split()
-        #asks user if they have a key
-        key_ans = "invalid choice"
-        while key_ans == "invalid choice":
-            #ask user if they have a key
-            print()
-            key_ans = input("Do you have a key?: ").lower()
-            #check that answer is valid
-            key_ans = string_checker(key_ans, yes_no)
-
-            if key_ans == "invalid choice":
-                print("Please enter yes or no")
-                print()
-
-        if key_ans == "Yes":
-            #asks user for a key for decryption
-            print()
-            key = num_check("What is your key? ", int, "Please enter a whole number")
-            # finds position of letters in the input string, replacing
-            # with letters higher up in the alphabet based on the
-            # key. 
-            # increase letter by key and add new letter to the decrypted text
-
-            for item in to_decrypt:
-                for i in item:
-                    if i in alphabet:
-                        #find letter from word in alphabet
-                        position = alphabet.find(i)
-                        #creates shuffles the letter to mach the key
-                        new_pos = (position - key) % 26
-                        new_character = alphabet[new_pos]
-                        #new decrypted letter is added to decrypted string
-                        decrypted += new_character
-                    else:
-                        decrypted += i
-                decrypted += " "
-            print()
-            print("Decrypted: ", decrypted)
-            print()
-            print("Key: ", key)
-        else:
-            correct_decrypt = False
-            key = 1
-            while correct_decrypt is False:
-                decrypted = ""
-                for item in to_decrypt:
-                    for i in item:
-                        if i in alphabet:
-                            #find letter from word in alphabet
-                            position = alphabet.find(i)
-                            #creates shuffles the letter to mach the key
-                            new_pos = (position - key) % 26
-                            new_character = alphabet[new_pos]
-                            #new decrypted letter is added to decrypted string
-                            decrypted += new_character
-                        else:
-                            decrypted += i
-                    decrypted += " "
-                
-                print()            
-                print("Attempted Decryption: '{}'".format(decrypted))
-
-                correct_ans = "invalid choice"
-
-                while correct_ans == "invalid choice":
-                    correct_ans = input("Is this decryption correct? ")
-
-                    correct_ans = string_checker(correct_ans, yes_no)
-                    
-                    if correct_ans == "invalid_choice":
-                        print("Please enter yes or no")
-                        print()
-
-
-                if correct_ans == "Yes":
-                    print()
-                    print("Decrypted: {}".format(decrypted))
-                    print()
-                    print("Key: {}".format(key))
-                    correct_decrypt = True
-                    break
-
-                else:
-                    key += 1
-                    correct_decrypt = False
 print()
 print("Thank you for using this program")
 print()
